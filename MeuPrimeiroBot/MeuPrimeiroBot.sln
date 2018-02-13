@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeuPrimeiroBot", "MeuPrimei
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaratonaBotsApi", "..\MaratonaBotsApi\MaratonaBotsApi\MaratonaBotsApi.csproj", "{19A38493-2B90-472E-91C9-75D53F3A6F81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pizzaria", "..\Pizzaria\Bot Application2\Pizzaria.csproj", "{5F97B64A-69B3-42A9-A2B0-632622AF2F55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,11 +23,15 @@ Global
 		{19A38493-2B90-472E-91C9-75D53F3A6F81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19A38493-2B90-472E-91C9-75D53F3A6F81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19A38493-2B90-472E-91C9-75D53F3A6F81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F97B64A-69B3-42A9-A2B0-632622AF2F55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F97B64A-69B3-42A9-A2B0-632622AF2F55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F97B64A-69B3-42A9-A2B0-632622AF2F55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F97B64A-69B3-42A9-A2B0-632622AF2F55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {CF40640B-04F6-4E62-8DF1-42E038E38683}
+		SolutionGuid = {31E0E379-AB67-4A5D-99B6-20C8793974C3}
 	EndGlobalSection
 EndGlobal
