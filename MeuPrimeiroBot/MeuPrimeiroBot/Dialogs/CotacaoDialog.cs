@@ -41,7 +41,7 @@ namespace MeuPrimeiroBot.Dialogs
                 } else if (currency.Contains("euro")) {
                     code = "EUR";
                 }
-                var endpoint = "";
+                var endpoint = $"{code}";
 
                 using (var client = new HttpClient())
                 {
