@@ -5,10 +5,6 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeuPrimeiroBot", "MeuPrimeiroBot\MeuPrimeiroBot.csproj", "{AABF2E73-19B7-4750-94F7-FA5D9D1F64A1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaratonaBotsApi", "..\MaratonaBotsApi\MaratonaBotsApi\MaratonaBotsApi.csproj", "{19A38493-2B90-472E-91C9-75D53F3A6F81}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pizzaria", "..\Pizzaria\Bot Application2\Pizzaria.csproj", "{5F97B64A-69B3-42A9-A2B0-632622AF2F55}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,14 +15,6 @@ Global
 		{AABF2E73-19B7-4750-94F7-FA5D9D1F64A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AABF2E73-19B7-4750-94F7-FA5D9D1F64A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AABF2E73-19B7-4750-94F7-FA5D9D1F64A1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{19A38493-2B90-472E-91C9-75D53F3A6F81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{19A38493-2B90-472E-91C9-75D53F3A6F81}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{19A38493-2B90-472E-91C9-75D53F3A6F81}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{19A38493-2B90-472E-91C9-75D53F3A6F81}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5F97B64A-69B3-42A9-A2B0-632622AF2F55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5F97B64A-69B3-42A9-A2B0-632622AF2F55}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5F97B64A-69B3-42A9-A2B0-632622AF2F55}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5F97B64A-69B3-42A9-A2B0-632622AF2F55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
