@@ -26,7 +26,6 @@ namespace MaratonaBotsApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CurrenciesContext>(opt => opt.UseInMemoryDatabase("CurrenciesList"));
-            services.AddDbContext<ShirtsContext>(opt => opt.UseInMemoryDatabase("ShirtsList"));
             services.AddMvc();
         }
 
