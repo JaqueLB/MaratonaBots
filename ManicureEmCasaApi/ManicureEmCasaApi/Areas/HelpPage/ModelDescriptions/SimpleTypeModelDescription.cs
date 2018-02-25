@@ -1,0 +1,6 @@
+namespace ManicureEmCasaApi.Areas.HelpPage.ModelDescriptions
+{
+    public class SimpleTypeModelDescription : ModelDescription
+    {
+    }
+}
