@@ -16,13 +16,13 @@ namespace ManicureEmCasaApi.Controllers
     {
         private AppointmentContext db = new AppointmentContext();
 
-        // GET: api/Appointments1
+        // GET: api/appointments
         public IQueryable<Appointment> GetAppointments()
         {
             return db.Appointments;
         }
 
-        // GET: api/Appointments1/5
+        // GET: api/appointments/5
         [ResponseType(typeof(Appointment))]
         public IHttpActionResult GetAppointment(long id)
         {
@@ -35,7 +35,7 @@ namespace ManicureEmCasaApi.Controllers
             return Ok(appointment);
         }
 
-        // PUT: api/Appointments1/5
+        // PUT: api/appointments/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutAppointment(long id, Appointment appointment)
         {
@@ -70,7 +70,7 @@ namespace ManicureEmCasaApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Appointments1
+        // POST: api/appointments
         [ResponseType(typeof(Appointment))]
         public IHttpActionResult PostAppointment(Appointment appointment)
         {
@@ -85,7 +85,7 @@ namespace ManicureEmCasaApi.Controllers
             return CreatedAtRoute("DefaultApi", new { id = appointment.Id }, appointment);
         }
 
-        // DELETE: api/Appointments1/5
+        // DELETE: api/appointments/5
         [ResponseType(typeof(Appointment))]
         public IHttpActionResult DeleteAppointment(long id)
         {
