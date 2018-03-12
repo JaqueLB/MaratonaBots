@@ -13,7 +13,7 @@ namespace ManicureEmCasaApi.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201802252019462_Initial"; }
+            get { return "201803120118540_Initial"; }
         }
         
         string IMigrationMetadata.Source

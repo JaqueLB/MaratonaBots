@@ -20,6 +20,6 @@ namespace ManicureEmCasaApi.Models
         }
 
         public System.Data.Entity.DbSet<ManicureEmCasaApi.Models.Appointment> Appointments { get; set; }
-        public System.Data.Entity.DbSet<ManicureEmCasaApi.Models.Service> MyServices{ get; set; }
+        public System.Data.Entity.DbSet<ManicureEmCasaApi.Models.Service> Services { get; set; }
     }
 }

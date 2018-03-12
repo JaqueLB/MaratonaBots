@@ -19,7 +19,7 @@ namespace ManicureEmCasaApi.Controllers
         // GET: api/services
         public IQueryable<Service> GetServices()
         {
-            return db.MyServices;
+            return db.Services;
         }
     }
 }
