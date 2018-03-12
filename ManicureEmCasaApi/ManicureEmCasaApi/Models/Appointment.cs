@@ -18,7 +18,7 @@ namespace ManicureEmCasaApi.Models
         public string Place { get; set; }
         public PaymentTypes PaymentType { get; set; }
         [Required]
-        public Services Service { get; set; }
+        public ServiceTypes Service { get; set; }
     }
 
     public enum PaymentTypes
@@ -27,10 +27,10 @@ namespace ManicureEmCasaApi.Models
         DebitCard,
     }
 
-    public enum Services
+    public enum ServiceTypes
     {
-        Manicure = 25,
-        Pedicure = 25,
-        Completo = 40,
+        Manicure = 1,
+        Pedicure,
+        Completo,
     }
 }
