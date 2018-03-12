@@ -6,7 +6,7 @@ using System.Web;
 
 namespace ManicureEmCasaApi.Models
 {
-    public class AppointmentContext : DbContext
+    public class ManicureEmCasaContext : DbContext
     {
         // You can add custom code to this file. Changes will not be overwritten.
         // 
@@ -15,10 +15,11 @@ namespace ManicureEmCasaApi.Models
         // For more information refer to the documentation:
         // http://msdn.microsoft.com/en-us/data/jj591621.aspx
     
-        public AppointmentContext() : base("name=AppointmentContext")
+        public ManicureEmCasaContext() : base("name=ManicureEmCasaContext")
         {
         }
 
         public System.Data.Entity.DbSet<ManicureEmCasaApi.Models.Appointment> Appointments { get; set; }
+        public System.Data.Entity.DbSet<ManicureEmCasaApi.Models.Service> MyServices{ get; set; }
     }
 }

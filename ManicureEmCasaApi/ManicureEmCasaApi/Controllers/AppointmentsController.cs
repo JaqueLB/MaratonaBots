@@ -14,7 +14,7 @@ namespace ManicureEmCasaApi.Controllers
 {
     public class AppointmentsController : ApiController
     {
-        private AppointmentContext db = new AppointmentContext();
+        private ManicureEmCasaContext db = new ManicureEmCasaContext();
 
         // GET: api/appointments
         public IQueryable<Appointment> GetAppointments()
