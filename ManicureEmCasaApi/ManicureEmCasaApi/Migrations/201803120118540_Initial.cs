@@ -28,7 +28,7 @@ namespace ManicureEmCasaApi.Migrations
                     {
                         Id = c.Long(nullable: false, identity: true),
                         Name = c.String(nullable: false),
-                        Price = c.Int(nullable: false),
+                        Price = c.Decimal(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             

@@ -20,13 +20,6 @@ namespace ManicureEmCasaApi
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            // run migrations at start
-            if (bool.Parse(ConfigurationManager.AppSettings["MigrateDatabaseToLatestVersion"]))
-            {
-                var configuration = new ManicureEmCasaApi.Migrations.Configuration();
-                var migrator = new DbMigrator(configuration);
-                migrator.Update();
-            }
         }
     }
 }

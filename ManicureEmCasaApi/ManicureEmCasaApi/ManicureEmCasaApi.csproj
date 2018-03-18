@@ -231,7 +231,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Properties\PublishProfiles\ManicureEmCasaApi20180225055850 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\ManicureEmCasaApi20180317103107 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
