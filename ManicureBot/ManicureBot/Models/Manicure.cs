@@ -19,17 +19,38 @@ namespace ManicureBot.Models
         public string Email { get; set; }
 
         [JsonProperty("DayTime")]
-        public string DayTime { get; set; }
+        public DateTime DayTime { get; set; }
+
+        [JsonProperty("Phone")]
+        public string Phone { get; set; }
 
         [JsonProperty("Place")]
         public string Place { get; set; }
 
         [JsonProperty("PaymentType")]
-        public int PaymentType { get; set; }
+        public PaymentTypes PaymentType { get; set; }
 
         [JsonProperty("Service")]
-        public int ServiceValue { get; set; }
+        public ServiceTypes ServiceType { get; set; }
+    }
 
-        //Todo service type from api!!!
+    public enum ServiceTypes
+    {
+        Manicure = 1,
+        Pedicure,
+        Completo,
+    }
+
+    public enum ServicePrices
+    {
+        Manicure = 25,
+        Pedicure = 25,
+        Completo = 40
+    }
+
+    public enum PaymentTypes
+    {
+        Money = 1,
+        DebitCard,
     }
 }
