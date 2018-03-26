@@ -62,7 +62,7 @@ namespace ManicureBot.Dialogs
                 "Atendemos de Segunda à Sábado, das 8h às 18h.";
             heroCard.Images = new List<CardImage>
             {
-                new CardImage("img/nail-varnish-2112358_640.jpg", "Esmaltes")
+                new CardImage("https://cdn.pixabay.com/photo/2017/03/02/20/54/nail-varnish-2112358_960_720.jpg", "Esmaltes")
             };
             var att = heroCard.ToAttachment();
 
@@ -83,9 +83,9 @@ namespace ManicureBot.Dialogs
                     string kind = null;
                     switch (entity.Type)
                     {
-                        case "kind::manicure": kind = "Manicure"; break;
-                        case "kind::pedicure": kind = "Pedicure"; break;
-                        case "kind::completo": kind = "Completo"; break;
+                        case "manicure": kind = "Manicure"; break;
+                        case "pedicure": kind = "Pedicure"; break;
+                        case "completo": kind = "Completo"; break;
                         default: kind = "Manicure"; break;
                     }
                     if (kind != null)
@@ -121,7 +121,11 @@ namespace ManicureBot.Dialogs
                 double orderPrice = 0.00;
                 DateTime today = DateTime.Today;
                 // get date and time
-                int daysUntilWeekDay = ((int)order.Day - (int)today.DayOfWeek + 7) % 7 + 1;
+                int current = (int)today.DayOfWeek;
+                int desired = (int)order.Day;
+                int n = (7 - current + desired);
+
+                int daysUntilWeekDay = (n > 7) ? n % 7 : n;
                 DateTime nextWeekDay = today.AddDays(daysUntilWeekDay);
                 DateTime agendado = new DateTime(nextWeekDay.Year, nextWeekDay.Month, nextWeekDay.Day, (int)order.Hour, 0, 0);
                 string scheduled = agendado.ToString();
@@ -146,7 +150,7 @@ namespace ManicureBot.Dialogs
                                 break;
                             }
                         }
-                        await context.PostAsync($"Retorno api: {json}");
+                        //await context.PostAsync($"Retorno api: {json}");
                     }
                 }
 
@@ -182,7 +186,7 @@ namespace ManicureBot.Dialogs
                             "Endereço: " + order.Address + "\r\n" +
                             "Telefone: " + order.Phone + "\r\n" +
                             "Email: " + order.Email);
-                        await context.PostAsync($"Retorno api: {json}");
+                        //await context.PostAsync($"Retorno api: {json}");
                     }
                 }
             }
