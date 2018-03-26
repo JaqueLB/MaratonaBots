@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using ManicureBot.Forms;
 using ManicureBot.Models;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
@@ -13,80 +18,206 @@ namespace ManicureBot.Dialogs
 {
     [Serializable]
     [LuisModel("LuisModelId", "LuisSubKey")]
-    public class RootDialog : LuisDialog<object>
+    public class RootDialog : LuisDialog<ManicureOrder>
     {
+        // code to change the dialog to FormFlow
+        private BuildFormDelegate<ManicureOrder> MakeManicureForm;
+
+        internal BuildFormDelegate<ManicureOrder> ManicureOrderDialog(BuildFormDelegate<ManicureOrder> makeManicureForm)
+        {
+            return this.MakeManicureForm = makeManicureForm;
+        }
+
         [LuisIntent("None")]
         public async Task None(IDialogContext context, LuisResult result)
         {
-            await context.PostAsync($"Desculpe, não entendi.");
+            await context.PostAsync("Desculpe, não entendi.");
         }
 
         [LuisIntent("Cumprimento")]
-        public async Task Greetings(IDialogContext context, LuisResult result)
+        public async Task Greetings(IDialogContext context, IAwaitable<IMessageActivity> argument, LuisResult result)
         {
-            await context.PostAsync("Olá, sou o Manicure Bot, o seu bot para solicitar serviços de manicure e/ou pedicure em casa!!");
-            await context.PostAsync("Para começar, digite algo como: Quais os serviços oferecidos?");
-            await context.PostAsync("Ou peça o serviço diretamente: Quero uma manicure");
+            var activity = await argument as Activity;
+            var userName = activity.From.Name;
+
+            await context.PostAsync("Olá! Sou o ManicureBot, seu serviço de solicitação de manicures em casa.");
+            await context.PostAsync($"Bem-vindo(a) {userName} .\r\n" +
+                $"Para começar, digite algo como: Quais os serviços oferecidos? Ou peça o serviço diretamente: Quero uma manicure.");
         }
 
         [LuisIntent("Sobre")]
-        public async Task About(IDialogContext context, LuisResult result)
+        public async Task About(IDialogContext context, IAwaitable<IMessageActivity> argument, LuisResult result)
         {
-            await context.PostAsync("Olá, sou o Manicure Bot, o seu bot para solicitar serviços de manicure e/ou pedicure em casa!!");
-            // todo acessar /services
-            await context.PostAsync("Oferecemos os serviços de: Manicure, Pedicure e Completo");
-            await context.PostAsync("O pagamento é realizado no local, diretamente para o profissional");
-            // todo acessar /paymentTypes
-            await context.PostAsync("Os nossos profissionais aceitam pagamento em dinheiro e cartão de débito");
-            await context.PostAsync("Antes de terminar seu pedido, solicitaremos o meio de pagamento para incluir a máquina de cartões ou o troco necessário.");
+            var activity = await argument as Activity;
+            var message = activity.CreateReply();
+
+            var heroCard = new HeroCard();
+            heroCard.Title = "Manicure Bot - Sobre";
+            heroCard.Text = "Sou um bot para solicitar serviços de manicure e/ou pedicure em casa.\r\n" +
+                "Oferecemos serviços de Manicure, Pedicure ou Completo.\r\n" +
+                "Você escolhe o serviço, o dia da semana e o horário.\r\n" +
+                "Se você solicitar para terça-feira, e hoje é uma terça, tenha em mente que o serviço será agendado para a próxima terça-feira.\r\n" +
+                "O pagamento é realizado no local, diretamente para a Dorinha, nossa profissional.\r\n" +
+                "Aceitamos pagamento em dinheiro e cartões de débito.\r\n" +
+                "Atendemos de Segunda à Sábado, das 8h às 18h.";
+            heroCard.Images = new List<CardImage>
+            {
+                new CardImage("img/nail-varnish-2112358_640.jpg", "Esmaltes")
+            };
+            var att = heroCard.ToAttachment();
+
+            message.Attachments.Add(att);
+            await context.PostAsync(message);
         }
 
         [LuisIntent("SolicitarServico")]
         public async Task Solicitacao(IDialogContext context, LuisResult result)
         {
-            // todo terminar a parte de solicitação de servicos
             // get all entities that LUIS recognized
-            var entities = result.Entities?.Select(e => e.Entity);
-
-            var endpoint = "https://manicureapi.azurewebsites.net/api/appointments";
-
-            using (var client = new HttpClient())
+            var entities = new List<EntityRecommendation>(result.Entities);
+            if (!entities.Any((entity) => entity.Type == "ServiceType"))
             {
-                //var myObj = new Manicure () {
-                //    Name = "Jaqueline",
-                //    Phone = "19 999",
-                //    Email = "teste",
-                //    DayTime = new DateTime(2018, 5, 30, 10, 30, 0),
-                //    PaymentType = PaymentTypes.Money,
-                //    ServiceType = ServiceTypes.Completo,
-                //    Place = "Teste",
-                //};
-                //var val = new StringContent(myObj.ToString(), System.Text.Encoding.UTF8, "application/json");
-
-                //var botResponse = await client.PostAsync(endpoint, val);
-
-                var botResponse = await client.GetAsync(endpoint);
-                foreach (string entity in entities)
+                // Infer serviceType and skip this step in FormFlow
+                foreach (var entity in result.Entities)
                 {
-                    if (entity.Contains("manicure"))
+                    string kind = null;
+                    switch (entity.Type)
+                    {
+                        case "kind::manicure": kind = "Manicure"; break;
+                        case "kind::pedicure": kind = "Pedicure"; break;
+                        case "kind::completo": kind = "Completo"; break;
+                        default: kind = "Manicure"; break;
+                    }
+                    if (kind != null)
+                    {
+                        entities.Add(new EntityRecommendation(type: "ServiceType") { Entity = kind });
+                        break;
+                    }
+                }
+            }
+            // call FormFlow to place an order
+            var manicureForm = new FormDialog<ManicureOrder>(new ManicureOrder(), this.MakeManicureForm, FormOptions.PromptInStart, entities);
+            context.Call(manicureForm, ManicureFormComplete);
+        }
+
+        // on complete form
+        private async Task ManicureFormComplete(IDialogContext context, IAwaitable<ManicureOrder> result)
+        {
+            ManicureOrder order = null;
+            try
+            {
+                order = await result;
+                var userName = order.Name;
+            }
+            catch (OperationCanceledException)
+            {
+                await context.PostAsync("Você cancelou o formulário!");
+                return;
+            }
+
+            if (order != null)
+            {
+                var endpointServices = "https://manicureapi.azurewebsites.net/api/services";
+                double orderPrice = 0.00;
+                DateTime today = DateTime.Today;
+                // get date and time
+                int daysUntilWeekDay = ((int)order.Day - (int)today.DayOfWeek + 7) % 7 + 1;
+                DateTime nextWeekDay = today.AddDays(daysUntilWeekDay);
+                DateTime agendado = new DateTime(nextWeekDay.Year, nextWeekDay.Month, nextWeekDay.Day, (int)order.Hour, 0, 0);
+                string scheduled = agendado.ToString();
+
+                using (var client = new HttpClient())
+                {
+                    var botResponse = await client.GetAsync(endpointServices);
+                    if (!botResponse.IsSuccessStatusCode)
+                    {
+                        await context.PostAsync("Por favor, confirme o preço com nossa profissional por WhatsApp/SMS/Ligação: 019 9999-9999");
+                    }
+                    else
                     {
                         var json = await botResponse.Content.ReadAsStringAsync();
-                        var objJson = JsonConvert.DeserializeObject(json);
-                        await context.PostAsync($"{objJson}");
+                        var services = JsonConvert.DeserializeObject<List<Service>>(json);
+                        // get price
+                        foreach (Service opt in services)
+                        {
+                            if ((opt.Name == order.ServiceType.ToString()) || (opt.Name.Contains("Completo") && order.ServiceType.ToString().Contains("Completo")))
+                            {
+                                orderPrice = Double.Parse(opt.Price);
+                                break;
+                            }
+                        }
+                        await context.PostAsync($"Retorno api: {json}");
                     }
                 }
 
-                if (!botResponse.IsSuccessStatusCode)
+                // send order data to api
+                var endpointAppointments = "https://manicureapi.azurewebsites.net/api/appointments";
+                var manicureOrderJson = JsonConvert.SerializeObject(new Manicure {
+                    Name = order.Name,
+                    Place = order.Address,
+                    Phone = order.Phone,
+                    DayTime = agendado,
+                    PaymentType = (int)order.PaymentType,
+                    ServiceType = (int)order.ServiceType,
+                    Email = order.Email
+                });
+
+                var manicureOrderData = new StringContent(manicureOrderJson.ToString(), Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
                 {
-                    await context.PostAsync($"Um erro ocorreu. {botResponse.StatusCode}");
-                    return;
-                }
-                else
-                {
-                    var json = await botResponse.Content.ReadAsStringAsync();
-                    await context.PostAsync($"{json}");
+                    var botResponse = await client.PostAsync(endpointAppointments, manicureOrderData);
+                    if (!botResponse.IsSuccessStatusCode)
+                    {
+                        await context.PostAsync("Um erro ocorreu.");
+                        return;
+                    }
+                    else
+                    {
+                        var json = await botResponse.Content.ReadAsStringAsync();
+                        await context.PostAsync("Veja os dados do seu pedido\nSeu Nome: " + order.Name + "\r\n" +
+                            "Serviço: " + order.ServiceType + "\r\n" +
+                            "Valor: " + orderPrice + "\r\n" +
+                            "Agendado para: " + scheduled + "\r\n" +
+                            "Endereço: " + order.Address + "\r\n" +
+                            "Telefone: " + order.Phone + "\r\n" +
+                            "Email: " + order.Email);
+                        await context.PostAsync($"Retorno api: {json}");
+                    }
                 }
             }
+            else
+            {
+                await context.PostAsync("Formulário retornou resposta vazia!");
+            }
+
+            context.Wait(MessageReceived);
         }
+
+        //[LuisIntent("ChecarSolicitacoes")]
+        //public async Task MinhasSolicitacoes(IDialogContext context, LuisResult result)
+        //{
+        //    // get all entities that LUIS recognized
+        //    var entities = new List<EntityRecommendation>(result.Entities);
+
+        //    // get user data
+
+        //    var endpoint = "";
+
+        //    using (var client = new HttpClient())
+        //    {
+        //        var botResponse = await client.GetAsync(endpoint);
+        //        if (!botResponse.IsSuccessStatusCode)
+        //        {
+        //            await context.PostAsync($"Um erro ocorreu. {botResponse.StatusCode}");
+        //            return;
+        //        }
+        //        else
+        //        {
+        //            var json = await botResponse.Content.ReadAsStringAsync();
+        //            await context.PostAsync($"{json}");
+        //        }
+        //    }
+        //}
     }
 }
