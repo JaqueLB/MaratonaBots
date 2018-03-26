@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace ManicureBot.Models
 {
@@ -28,29 +25,9 @@ namespace ManicureBot.Models
         public string Place { get; set; }
 
         [JsonProperty("PaymentType")]
-        public PaymentTypes PaymentType { get; set; }
+        public int PaymentType { get; set; }
 
         [JsonProperty("Service")]
-        public ServiceTypes ServiceType { get; set; }
-    }
-
-    public enum ServiceTypes
-    {
-        Manicure = 1,
-        Pedicure,
-        Completo,
-    }
-
-    public enum ServicePrices
-    {
-        Manicure = 25,
-        Pedicure = 25,
-        Completo = 40
-    }
-
-    public enum PaymentTypes
-    {
-        Money = 1,
-        DebitCard,
+        public int ServiceType { get; set; }
     }
 }
