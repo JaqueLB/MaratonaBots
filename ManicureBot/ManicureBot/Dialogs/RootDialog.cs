@@ -52,22 +52,23 @@ namespace ManicureBot.Dialogs
             var message = activity.CreateReply();
 
             var heroCard = new HeroCard();
-            heroCard.Title = "Manicure Bot - Sobre";
-            heroCard.Text = "Sou um bot para solicitar serviços de manicure e/ou pedicure em casa.\r\n" +
-                "Oferecemos serviços de Manicure, Pedicure ou Completo.\r\n" +
-                "Você escolhe o serviço, o dia da semana e o horário.\r\n" +
-                "Se você solicitar para terça-feira, e hoje é uma terça, tenha em mente que o serviço será agendado para a próxima terça-feira.\r\n" +
-                "O pagamento é realizado no local, diretamente para a Dorinha, nossa profissional.\r\n" +
-                "Aceitamos pagamento em dinheiro e cartões de débito.\r\n" +
-                "Atendemos de Segunda à Sábado, das 8h às 18h.";
+            heroCard.Title = "Manicure Bot";
+            heroCard.Subtitle = "Sobre";
             heroCard.Images = new List<CardImage>
             {
                 new CardImage("https://cdn.pixabay.com/photo/2017/03/02/20/54/nail-varnish-2112358_960_720.jpg", "Esmaltes")
             };
             var att = heroCard.ToAttachment();
-
             message.Attachments.Add(att);
             await context.PostAsync(message);
+
+            await context.PostAsync("Sou um bot para solicitar serviços de manicure e/ou pedicure em casa.\r\n" +
+                "Oferecemos serviços de Manicure, Pedicure ou Completo.\r\n");
+            await context.PostAsync("Você escolhe o serviço, o dia da semana e o horário.\r\n" +
+               "Se você solicitar para terça-feira, e hoje é uma terça, tenha em mente que o serviço será agendado para a próxima terça-feira.\r\n");
+            await context.PostAsync("O pagamento é realizado no local, diretamente para a Dorinha, nossa profissional.\r\n" +
+                "Aceitamos pagamento em dinheiro e cartões de débito.\r\n");
+            await context.PostAsync("Atendemos de Segunda à Sábado, das 8h às 18h.");
         }
 
         [LuisIntent("SolicitarServico")]
@@ -179,13 +180,14 @@ namespace ManicureBot.Dialogs
                     else
                     {
                         var json = await botResponse.Content.ReadAsStringAsync();
-                        await context.PostAsync("Veja os dados do seu pedido\nSeu Nome: " + order.Name + "\r\n" +
-                            "Serviço: " + order.ServiceType + "\r\n" +
-                            "Valor: " + orderPrice + "\r\n" +
-                            "Agendado para: " + scheduled + "\r\n" +
-                            "Endereço: " + order.Address + "\r\n" +
-                            "Telefone: " + order.Phone + "\r\n" +
-                            "Email: " + order.Email);
+                        await context.PostAsync("Veja os dados do seu pedido");
+                        await context.PostAsync("Seu Nome: " + order.Name);
+                        await context.PostAsync("Serviço: " + order.ServiceType);
+                        await context.PostAsync("Valor: " + orderPrice);
+                        await context.PostAsync("Agendado para: " + scheduled);
+                        await context.PostAsync("Endereço: " + order.Address);
+                        await context.PostAsync("Telefone: " + order.Phone);
+                        await context.PostAsync("Email: " + order.Email);
                         //await context.PostAsync($"Retorno api: {json}");
                     }
                 }
